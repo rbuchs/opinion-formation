@@ -7,7 +7,7 @@ import OpinionGraph
 def SimulationBeginEnd(graph, phi, n_step):
     
     layout=nx.spring_layout(graph)
-    
+    x
     print('------------- Initial graph ------------')
     OpinionGraph.Plot(graph, layout)
     plt.show()
