@@ -7,7 +7,6 @@ import OpinionGraph
 def SimulationBeginEnd(graph, phi, n_step):
     
     layout=nx.spring_layout(graph)
-    x
     print('------------- Initial graph ------------')
     OpinionGraph.Plot(graph, layout)
     plt.show()
@@ -16,7 +15,11 @@ def SimulationBeginEnd(graph, phi, n_step):
         graph = OneStep(graph, phi, layout=layout, verbose=False)
     
     print('------------- Final graph ------------')
+    print('**** Same layout **** ')
     OpinionGraph.Plot(graph, layout)
+    plt.show()
+    print('**** New layout **** ')
+    OpinionGraph.Plot(graph)
     plt.show()
 
 
@@ -42,7 +45,7 @@ def OneStep(graph, phi, layout=None, verbose=False):
     
     node_i = int(np.random.choice(graph.nodes(), 1))
     if verbose:
-        print('Node i selected : {0}'.format(node_i))
+        print('Selected node_i : {0}'.format(node_i))
         
     if graph.degree[node_i] == 0:
         if verbose:
@@ -65,26 +68,52 @@ def OneStep(graph, phi, layout=None, verbose=False):
 
 # Step 1 represents the formation of new acquaintances between people of similar opinions.
 def Step1(graph, node_i, verbose):
+    #take opinion of node_i
     opinion_gi = graph.nodes[node_i]['opinion']
     
-    edges_list = list(graph.edges(nbunch=node_i))
-    edge_selected = int(np.random.choice(len(edges_list), 1))
-    node_j = edges_list[edge_selected][1]
+    #Compute neighbours of node_i (can have itself, and many occurence of same neighbour)
+    neighbors = list(graph.neighbors(node_i))
+    if verbose:
+        print('Neighbors of node_i : {0}'.format(neighbors))
     
+    #Select random neighbor. This aquaintance will be deleted. (tend to delete more easily the ''mulit-aquaintances'
+    #or multi-self-loop')
+    node_j = int(np.random.choice(neighbors, 1))
+    if verbose:
+        print('Selected node_j : {0}'.format(node_j))
+    
+    #Compute all nodes with opinion of node_i
     nodes_with_gi = [n for n, attr in graph.nodes(data=True) if attr['opinion']==opinion_gi]
+    if verbose:
+        print('Nodes with opinion g_i : {0}'.format(nodes_with_gi))
+        
+    #Select randomly the new aquaintance
     node_j_prime = int(np.random.choice(nodes_with_gi, 1))
+    if verbose:
+        print('Selected node_j_prime : {0}'.format(node_j_prime))
 
     graph.remove_edge(node_i, node_j)
     graph.add_edge(node_i, node_j_prime)
     if verbose:
-        print('Edge moved from node {0} to node {1}'.format(node_j, node_j_prime))
+        print('Edge moved from ({0},{1}) to ({0},{2})'.format(node_i, node_j, node_j_prime))
     return graph
 
 #Step 2 represents the influence of acquaintances on one another, opinions becoming similar as a result of acquaintance.
 def Step2(graph, node_i, verbose):
-    neighbours = list(graph[node_i])
-    node_j = int(np.random.choice(neighbours, 1))
+    
+    #Compute neighbours of node_i (can have itself, and many occurence of same neighbour)
+    neighbors = list(graph.neighbors(node_i))
+    if verbose:
+        print('Neighbors of node_i : {0}'.format(neighbors))
+        
+    #Select random neighbor.
+    node_j = int(np.random.choice(neighbors, 1))
+    if verbose:
+        print('Selected node_j : {0}'.format(node_j))
+    
+    #Opinion of node_i
     previous_opinion = graph.node[node_i]['opinion']
+    #Change opinion of node_i to the one of node_j
     graph.node[node_i]['opinion'] = graph.node[node_j]['opinion']
     if verbose:
         print('Opinion of node {0} changed from {1} to {2}'.format(node_i, previous_opinion, graph.node[node_i]['opinion']))

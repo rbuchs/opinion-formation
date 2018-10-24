@@ -1,9 +1,11 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 import numpy as np
+from collections import Counter
 
 #Create a random graph with n_nodes and m_edges. n_opinion is the number of possible opinions, stored in the 
 #'opinion' attribut of the node. If not given n_opinion=n_nodes. The opinions are integers in [0, n_opinion]
+#The graph can have multiedges and self-loops. Nevertheless, it is created with no multiedges and no self-loops.
 def CreateRandom(n_nodes, m_edges, n_opinion=None):
     if n_opinion is None:
         n_opinion = n_nodes
@@ -15,6 +17,7 @@ def CreateRandom(n_nodes, m_edges, n_opinion=None):
     for n, o in zip(graph, opinions):
         graph.nodes[n]['opinion'] = o
     
+    graph = nx.MultiGraph(graph)
     return graph
 
 def Plot(graph, layout=None, axis=False):
@@ -26,3 +29,22 @@ def Plot(graph, layout=None, axis=False):
     ax = nx.draw_networkx(graph, pos=layout, with_labels=True, node_color=op, font_color='w')
     if not axis:
         plt.axis('off')
+
+def Components(graph):
+    return list(nx.connected_components(graph))
+
+def NComponents(graph):
+    return len(Components(graph))
+
+def CountComponents(graph):
+    return Counter([len(comp) for comp in Components(graph)])
+
+def ConsensusState(graph):
+    consensus = []
+    for comp in Components(graph):
+        subgraph = graph.subgraph(list(comp))
+        opinions = list(nx.get_node_attributes(subgraph, 'opinion').values())
+        consensus.append((opinions == opinions[0]).all())
+    return consensus
+
+
