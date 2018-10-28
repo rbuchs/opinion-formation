@@ -1,27 +1,47 @@
 import networkx as nx
 import numpy as np
 import matplotlib.pyplot as plt
+import time
 import OpinionGraph
 
 
-def SimulationBeginEnd(graph, phi, n_step):
+def SimulationBeginEnd(graph, phi, n_step, verbose=False):
     
-    layout=nx.spring_layout(graph)
-    print('------------- Initial graph ------------')
-    OpinionGraph.Plot(graph, layout)
-    plt.show()
+    if verbose:
+        layout=nx.spring_layout(graph)
+        print('------------- Initial graph ------------')
+        OpinionGraph.Plot(graph, layout)
+        plt.show()
         
     for i in range(n_step):
         graph = OneStep(graph, phi, layout=layout, verbose=False)
-    
-    print('------------- Final graph ------------')
-    print('**** Same layout **** ')
-    OpinionGraph.Plot(graph, layout)
-    plt.show()
-    print('**** New layout **** ')
-    OpinionGraph.Plot(graph)
-    plt.show()
+        
+    if verbose:
+        print('------------- Final graph ------------')
+        print('**** Same layout **** ')
+        OpinionGraph.Plot(graph, layout)
+        plt.show()
+        print('**** New layout **** ')
+        OpinionGraph.Plot(graph)
+        plt.show()
 
+def SimulationEndConsensus(graph, phi):
+    t0 = time.time()  
+    consensus = OpinionGraph.ConsensusState(graph).all()
+    n_step = 0
+    
+    while not consensus:
+        graph = OpinionAlgorithm.OneStep(graph, phi)
+        n_step += 1
+        if n_step%1000 == 0:
+            log(t0, 'Step {0}'.format(n_step))
+            print('Number of components', OpinionGraph.NComponents(graph))
+            print('Number of components in consensus', OpinionGraph.ConsensusState(graph).sum())
+            print('Percentage nodes in consensus', OpinionGraph.PercentageNodesConsensusState(graph))
+        consensus = OpinionGraph.ConsensusState(graph).all()
+        
+        
+    log(t0, 'Total nuber of steps : {0}'.format(n_step))
 
 def Simulation(graph, phi, n_step, verbose=False):
     
@@ -40,7 +60,7 @@ def Simulation(graph, phi, n_step, verbose=False):
 #Do one step of the model
 def OneStep(graph, phi, layout=None, verbose=False):
     
-    if layout==None:
+    if (verbose==True) and (layout==None):
         layout=nx.spring_layout(graph)
     
     node_i = int(np.random.choice(graph.nodes(), 1))
@@ -118,3 +138,6 @@ def Step2(graph, node_i, verbose):
     if verbose:
         print('Opinion of node {0} changed from {1} to {2}'.format(node_i, previous_opinion, graph.node[node_i]['opinion']))
     return graph
+
+def log(t0, text):
+    print(time.time()-t0, text)
