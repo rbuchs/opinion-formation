@@ -7,6 +7,7 @@ import OpinionGraph
 
 def SimulationBeginEnd(graph, phi, n_step, verbose=False):
     
+    layout=None
     if verbose:
         layout=nx.spring_layout(graph)
         print('------------- Initial graph ------------')
@@ -87,6 +88,7 @@ def OneStep(graph, phi, layout=None, verbose=False):
     return graph
 
 # Step 1 represents the formation of new acquaintances between people of similar opinions.
+        #limitations: can form acquaintance with itself or 'double' existing acquaintance
 def Step1(graph, node_i, verbose):
     #take opinion of node_i
     opinion_gi = graph.nodes[node_i]['opinion']
