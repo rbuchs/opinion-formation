@@ -26,7 +26,7 @@ def SimulationBeginEnd(graph, phi, n_step, verbose=False):
         OpinionGraph.Plot(graph)
         plt.show()
 
-def SimulationEndConsensus(graph, phi):
+def SimulationEndConsensus(graph, phi, verbose=False):
     t0 = time.time()  
     consensus = OpinionGraph.ConsensusState(graph).all()
     n_step = 0
@@ -34,15 +34,16 @@ def SimulationEndConsensus(graph, phi):
     while not consensus:
         graph = OpinionAlgorithm.OneStep(graph, phi)
         n_step += 1
-        if n_step%1000 == 0:
+        if (n_step%1000 == 0) and (verbose==True):
             log(t0, 'Step {0}'.format(n_step))
             print('Number of components', OpinionGraph.NComponents(graph))
             print('Number of components in consensus', OpinionGraph.ConsensusState(graph).sum())
             print('Percentage nodes in consensus', OpinionGraph.PercentageNodesConsensusState(graph))
         consensus = OpinionGraph.ConsensusState(graph).all()
         
-        
-    log(t0, 'Total nuber of steps : {0}'.format(n_step))
+    if verbose==True:    
+        log(t0, 'Total nuber of steps : {0}'.format(n_step))
+    return n_step
 
 def Simulation(graph, phi, n_step, verbose=False):
     
