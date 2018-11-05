@@ -47,9 +47,9 @@ def SimulationEndConsensus(graph, phi, verbose=False):
 
 def Simulation(graph, phi, n_step, verbose=False):
     
-    layout=nx.spring_layout(graph)
-
+    layout=None
     if verbose:
+        layout=nx.spring_layout(graph)
         print('------------- Initial graph ------------')
         OpinionGraph.Plot(graph, layout)
         plt.show()
