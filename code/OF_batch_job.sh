@@ -1,6 +1,5 @@
-#BSUB -q medium
-#BSUB -W 10
+#BSUB -W 100
 #BSUB -J "Opinion-formation-phi0"
-#BSUB -oo //cluster/home/buchsr/output/Opinion-formation-phi0.log
+#BSUB -oo //cluster/home/buchsr/output/Opinion-formation-phi0.04.log
 
-python /cluster/home/buchsr/opinion-formation/code/run.py 0 10
+python /cluster/home/buchsr/opinion-formation/code/run.py 0.04 10

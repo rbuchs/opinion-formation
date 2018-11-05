@@ -4,7 +4,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 import yaml
 import time
+import sys
 
+import OpinionGraph
+import OpinionAlgorithm
+
+def log(t0, text):
+    print('GLOBAL:', time.time()-t0, text)
 
 def main():
     global_t0 = time.time()
@@ -21,13 +27,14 @@ def main():
     n_steps = []
     components_number = np.array([])
     for i in range(n_iter):
-        log(global_t0, '******** N_ITER {0} *******'.format(i))
+        print('******** N_ITER {0} *******'.format(i))
+        log(global_t0, '')
         G = OpinionGraph.CreateRandom(n, m, n_opinion)
         log(global_t0, 'Random graph created')
         # Number of components
         print('Components counter', OpinionGraph.CountComponents(G))
         print('Percentage nodes in componenets in consensus state', OpinionGraph.PercentageNodesConsensusState(G))
-        n_steps.append(SimulationEndConsensus(G, phi))
+        n_steps.append(OpinionAlgorithm.SimulationEndConsensus(G, phi,True))
         comp = OpinionGraph.CountComponents(current_graph)
         print('Components', comp)
         comp = dict(comp)
@@ -43,8 +50,8 @@ def main():
     
 if __name__ == '__main__':
     
-    phi = sys.argv[1]
-    n_iter = sys.argv[2]
+    phi = float(sys.argv[1])
+    n_iter = int(sys.argv[2])
     
     #cfgfile = sys.argv[1]
     #with open(cfgfile, 'r') as fp:
@@ -52,5 +59,3 @@ if __name__ == '__main__':
     
     main()
 
-def log(t0, text):
-    print('GLOBAL:', time.time()-t0, text)

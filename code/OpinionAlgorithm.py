@@ -32,7 +32,7 @@ def SimulationEndConsensus(graph, phi, verbose=False):
     n_step = 0
     
     while not consensus:
-        graph = OpinionAlgorithm.OneStep(graph, phi)
+        graph = OneStep(graph, phi)
         n_step += 1
         if (n_step%1000 == 0) and (verbose==True):
             log(t0, 'Step {0}'.format(n_step))

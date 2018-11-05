@@ -9,4 +9,8 @@ That seems to work well when phi is 1 but not when phi is 0. It might just be a 
 
 30.10.18
 
-The code seems to work. Should now send with various phi and graphs to cluster to replicate paper results.
+The code seems to work. Should now send with various phi and graphs to cluster to replicate paper results
+
+01.11.18
+
+Submittin job on cluster works. But takes way too much time
