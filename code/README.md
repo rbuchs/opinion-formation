@@ -11,6 +11,10 @@ That seems to work well when phi is 1 but not when phi is 0. It might just be a 
 
 The code seems to work. Should now send with various phi and graphs to cluster to replicate paper results
 
-01.11.18
+01.11.18 Romain
 
 Submittin job on cluster works. But takes way too much time
+
+05.11.18 Romain
+
+Apparently the code takes a lot of time. Some quatties are computed in `Speed_test.ipynb`. The bottleneck is the evaluation of the consensus state but even without that it is too slow if we want to average over 10^4 iterations...
