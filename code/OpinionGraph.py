@@ -42,11 +42,11 @@ def CountComponents(graph):
 def ConsensusState(graph, withnodes=False):
     consensus = []
     n_nodes = []
-    for comp in Components(graph):
-        subgraph = graph.subgraph(list(comp))
-        opinions = list(nx.get_node_attributes(subgraph, 'opinion').values())
-        consensus.append((opinions == opinions[0]).all())
-        n_nodes.append(len(subgraph.nodes()))
+    opinions = np.array(list(nx.get_node_attributes(graph, 'opinion').values()))
+    for comp in nx.connected_components(graph):
+        comp_opinions = opinions[list(comp)]
+        consensus.append((comp_opinions == comp_opinions[0]).all())
+        n_nodes.append(len(comp_opinions))
     if withnodes:
         return np.array(consensus), np.array(n_nodes)
     else:
@@ -55,4 +55,14 @@ def ConsensusState(graph, withnodes=False):
 def PercentageNodesConsensusState(graph):
     consensus, nodes = ConsensusState(graph, withnodes=True)
     return nodes[consensus].sum()/nodes.sum()
+
+def summary(graph):
+    # Total number of components
+    print('Total number of components: {0}'.format(NComponents(graph)))
+    #Components size of the graph
+    print('Components size: {0}'.format(CountComponents(graph)))
+    # Bool for consensus state in each component
+    print('All components in consensus: {0}'.format(ConsensusState(graph).all()))
+    # percentage nodes in consensus components
+    print('Percentage of nodes in components in consensus state: {0}'.format(PercentageNodesConsensusState(graph)))
     

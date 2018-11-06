@@ -4,21 +4,51 @@ import matplotlib.pyplot as plt
 import time
 import OpinionGraph
 
-
-def SimulationBeginEnd(graph, phi, n_step, verbose=False):
+#checkconsensus speeds computation by not checking at everytime if we reached consensus (may end up doing more steps than needed though)
+def SimulationEndConsensus(graph, phi, verbose=False, checkconsensus=1):
+    t0 = time.time()  
+    consensus = OpinionGraph.ConsensusState(graph).all()
+    n_step = 0
     
-    layout=None
-    if verbose:
-        layout=nx.spring_layout(graph)
+    #Compute the picked node and which step (1/2) will be taken at each iteration. As don't know how many iteration, take 1e6 to have enough
+    nodes = np.random.choice(graph.nodes(), int(1e6))
+    bool_step = np.random.choice(np.array([True, False]), size=int(1e6), p=np.array([phi, 1-phi]))
+    
+    while not consensus:
+        graph = OneIteration(graph, nodes[n_step], bool_step[n_step])
+        if (n_step%1000 == 0) and (verbose==True):
+            log(t0, 'Iteration {0}'.format(n_step))
+            print('Number of components', OpinionGraph.NComponents(graph))
+            print('Number of components in consensus', OpinionGraph.ConsensusState(graph).sum())
+            print('Percentage nodes in consensus', OpinionGraph.PercentageNodesConsensusState(graph))
+        if (n_step%checkconsensus == 0):
+            consensus = OpinionGraph.ConsensusState(graph).all()
+        n_step += 1
+        
+    if verbose==True:    
+        log(t0, 'Total nuber of steps : {0}'.format(n_step))
+    return n_step
+
+def Simulation(graph, phi, n_step, verbose=False, verboseBeginEnd=False):
+    
+    layout = None
+    if verbose or verboseBeginEnd:
+        layout = nx.spring_layout(graph)
         print('------------- Initial graph ------------')
         OpinionGraph.Plot(graph, layout)
         plt.show()
         
+    #Compute the picked node and which step (1/2) will be taken at each iteration
+    nodes = np.random.choice(graph.nodes(), int(n_step))
+    bool_step = np.random.choice(np.array([True, False]), size=int(n_step), p=np.array([phi, 1-phi]))
+    
     for i in range(n_step):
-        graph = OneStep(graph, phi, layout=layout, verbose=False)
+        if verbose:
+            print('------------- Step {0} ------------'.format(i))
+        graph = OneIteration(graph, nodes[i], bool_step[i], layout=layout, verbose=verbose)
         
-    if verbose:
-        print('------------- Final graph ------------')
+    if verboseBeginEnd:
+        print('------------- Final graph -------------')
         print('**** Same layout **** ')
         OpinionGraph.Plot(graph, layout)
         plt.show()
@@ -26,46 +56,12 @@ def SimulationBeginEnd(graph, phi, n_step, verbose=False):
         OpinionGraph.Plot(graph)
         plt.show()
 
-def SimulationEndConsensus(graph, phi, verbose=False):
-    t0 = time.time()  
-    consensus = OpinionGraph.ConsensusState(graph).all()
-    n_step = 0
-    
-    while not consensus:
-        graph = OneStep(graph, phi)
-        n_step += 1
-        if (n_step%1000 == 0) and (verbose==True):
-            log(t0, 'Step {0}'.format(n_step))
-            print('Number of components', OpinionGraph.NComponents(graph))
-            print('Number of components in consensus', OpinionGraph.ConsensusState(graph).sum())
-            print('Percentage nodes in consensus', OpinionGraph.PercentageNodesConsensusState(graph))
-        consensus = OpinionGraph.ConsensusState(graph).all()
-        
-    if verbose==True:    
-        log(t0, 'Total nuber of steps : {0}'.format(n_step))
-    return n_step
-
-def Simulation(graph, phi, n_step, verbose=False):
-    
-    layout=None
-    if verbose:
-        layout=nx.spring_layout(graph)
-        print('------------- Initial graph ------------')
-        OpinionGraph.Plot(graph, layout)
-        plt.show()
-        
-    for i in range(n_step):
-        if verbose:
-            print('------------- Step {0} ------------'.format(i))
-        OneStep(graph, phi, layout=layout, verbose=verbose) 
-
 #Do one step of the model
-def OneStep(graph, phi, layout=None, verbose=False):
+def OneIteration(graph, node_i, bool_step, layout=None, verbose=False):
     
     if (verbose==True) and (layout==None):
         layout=nx.spring_layout(graph)
-    
-    node_i = int(np.random.choice(graph.nodes(), 1))
+        
     if verbose:
         print('Selected node_i : {0}'.format(node_i))
         
@@ -74,7 +70,6 @@ def OneStep(graph, phi, layout=None, verbose=False):
             print('Degree of node i is 0.')
         return graph
     else:
-        bool_step = np.random.choice(np.array([True, False]), size=1, p=np.array([phi, 1-phi]))
         if bool_step:
             if verbose:
                 print('DOING STEP 1')
@@ -89,7 +84,7 @@ def OneStep(graph, phi, layout=None, verbose=False):
     return graph
 
 # Step 1 represents the formation of new acquaintances between people of similar opinions.
-        #limitations: can form acquaintance with itself or 'double' existing acquaintance
+#limitations: can form acquaintance with itself or 'double' existing acquaintance
 def Step1(graph, node_i, verbose):
     #take opinion of node_i
     opinion_gi = graph.nodes[node_i]['opinion']
@@ -135,7 +130,8 @@ def Step2(graph, node_i, verbose):
         print('Selected node_j : {0}'.format(node_j))
     
     #Opinion of node_i
-    previous_opinion = graph.node[node_i]['opinion']
+    if verbose:
+        previous_opinion = graph.node[node_i]['opinion']
     #Change opinion of node_i to the one of node_j
     graph.node[node_i]['opinion'] = graph.node[node_j]['opinion']
     if verbose:
