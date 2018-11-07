@@ -5,7 +5,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import yaml
 import time
-import sys
+import sys, os
+import shutil
 
 import OpinionGraph
 import OpinionAlgorithm
@@ -24,14 +25,15 @@ def main():
     m = 6400
     gamma = 10
     n_opinion = int(n/gamma)
-    #output_path = '/cluster/home/buchsr/output'
-    output_path = '/Users/romainbuchs/Documents/ETHZ/Modelling and Simulating Social Systems/output'
-    scratch_path = output_path
+    output_path = '/cluster/home/buchsr/output'
+    #output_path = '/Users/romainbuchs/Documents/ETHZ/Modelling and Simulating Social Systems/output'
+    scratch_path = '/scratch/buchsr'
     
     if rank==0:
         print('----------- Graph, n={0}, m={1}, gamma={2} ------------'.format(m,n,gamma))
         print('----------------------- Phi={0} -----------------------'.format(phi))
         print('We will perform {0} iterations'.format(n_iter))
+        os.makedirs(scratch_path)
     
     iterations = np.arange(n_iter)
     print("Rank {0} assigned {1} iterations".format(rank, len(iterations[rank::size])))
@@ -54,7 +56,7 @@ def main():
         components_num = np.zeros(n)
         components_num[list(comp.keys())] = list(comp.values())
 
-        np.save('{0}/ComponentsSize_phi_{1}_iter_{2}.npy'.format(output_path, phi, i), components_num)
+        np.save('{0}/ComponentsSize_phi_{1}_{2}.npy'.format(scratch_path, phi, i), components_num)
     
     
     
@@ -62,11 +64,16 @@ def main():
     if rank==0:
         all_results = []
         for i in range(n_iter):
-            all_results.append(np.load('{0}/ComponentsSize_phi_{1}.{2}.npy'.format(scratch_path, phi, i)))   
+            all_results.append(np.load('{0}/ComponentsSize_phi_{1}_{2}.npy'.format(scratch_path, phi, i)))   
         all_results = np.array(all_results)
         
         np.save('{0}/ComponentsSize_phi_{1}.npy'.format(output_path, phi), all_results)
-                                         
+
+        try:
+            shutil.rmtree(scratch_path)
+        except OSError as e:
+            print ("Error: {0} - {1}.".format(e.filename, e.strerror))
+
         log(global_t0, '************ Job completed ************')
 
 if __name__ == '__main__':

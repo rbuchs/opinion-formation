@@ -13,9 +13,8 @@ def CreateRandom(n_nodes, m_edges, n_opinion=None):
     
     graph = nx.gnm_random_graph(n_nodes, m_edges)
     
-    # set opinions
-    for n, o in zip(graph, opinions):
-        graph.nodes[n]['opinion'] = o
+    # set opiniions
+    nx.set_node_attributes(graph, values=dict(zip(range(n_nodes), opinions)), name='opinion')
     
     graph = nx.MultiGraph(graph)
     return graph

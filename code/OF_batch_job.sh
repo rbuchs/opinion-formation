@@ -1,5 +1,6 @@
-#BSUB -W 100
 #BSUB -J "Opinion-formation-phi0"
-#BSUB -oo //cluster/home/buchsr/output/Opinion-formation-phi0.04.log
+#BSUB -oo 
 
+module load python/3.6.1
+module load open
 python /cluster/home/buchsr/opinion-formation/code/run.py 0.04 10
