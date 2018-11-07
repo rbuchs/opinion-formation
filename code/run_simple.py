@@ -43,8 +43,7 @@ def main():
     components_num[list(comp.keys())] = list(comp.values())
     
     np.save('{0}/componenents_number_phi{1}.npy'.format(output_path, phi), components_num)
-    
-    
+
 if __name__ == '__main__':
     
     phi = float(sys.argv[1])
