@@ -9,22 +9,29 @@ def SimulationEndConsensus(graph, phi, verbose=False, checkconsensus=1):
     t0 = time.time()  
     consensus = OpinionGraph.ConsensusState(graph).all()
     n_step = 0
+    s = 0
     
-    #Compute the picked node and which step (1/2) will be taken at each iteration. As don't know how many iteration, take 1e6 to have enough
-    nodes = np.random.choice(graph.nodes(), int(1e6))
-    bool_step = np.random.choice(np.array([True, False]), size=int(1e6), p=np.array([phi, 1-phi]))
+    #Compute the picked node and which step (1/2) will be taken at each iteration. Compute for first 1e6 iterations
+    n_iter_batch = int(1e6)
+    nodes = np.random.choice(graph.nodes(), n_iter_batch)
+    bool_step = np.random.choice(np.array([True, False]), size=n_iter_batch, p=np.array([phi, 1-phi]))
     
     while not consensus:
-        graph = OneIteration(graph, nodes[n_step], bool_step[n_step])
+        graph = OneIteration(graph, nodes[s], bool_step[s])
         if (n_step%1000 == 0) and (verbose==True):
             log(t0, 'Iteration {0}'.format(n_step))
             print('Number of components', OpinionGraph.NComponents(graph))
             print('Number of components in consensus', OpinionGraph.ConsensusState(graph).sum())
             print('Percentage nodes in consensus', OpinionGraph.PercentageNodesConsensusState(graph))
+        s += 1
+        if (s%(n_iter_batch) == 0):
+            nodes = np.random.choice(graph.nodes(), n_iter_batch)
+            bool_step = np.random.choice(np.array([True, False]), size=n_iter_batch, p=np.array([phi, 1-phi]))
+            n_step += n_iter_batch
+            s = 0
         if (n_step%checkconsensus == 0):
             consensus = OpinionGraph.ConsensusState(graph).all()
-        n_step += 1
-        
+    n_step += s
     if verbose==True:    
         log(t0, 'Total nuber of steps : {0}'.format(n_step))
     return n_step
