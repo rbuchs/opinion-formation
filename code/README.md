@@ -18,3 +18,9 @@ Submittin job on cluster works. But takes way too much time
 05.11.18 Romain
 
 Apparently the code takes a lot of time. Some quatties are computed in `Speed_test.ipynb`. The bottleneck is the evaluation of the consensus state but even without that it is too slow if we want to average over 10^4 iterations...
+
+13.11.18 Romain
+
+Phi=0.04: more than 8h....
+Phi=0.458: 5000-9800 sec per realization of n=3200, m=6400 (one realization run on one node)
+Phi=0.96: 500-1000 sec per realization of n=3200, m=6400 (one realization run on one node)

@@ -18,8 +18,8 @@ def SimulationEndConsensus(graph, phi, verbose=False, checkconsensus=1):
     
     while not consensus:
         graph = OneIteration(graph, nodes[s], bool_step[s])
-        if (n_step%1000 == 0) and (verbose==True):
-            log(t0, 'Iteration {0}'.format(n_step))
+        if (s%1000 == 0) and (verbose==True):
+            log(t0, 'Iteration {0}'.format(n_step+s))
             print('Number of components', OpinionGraph.NComponents(graph))
             print('Number of components in consensus', OpinionGraph.ConsensusState(graph).sum())
             print('Percentage nodes in consensus', OpinionGraph.PercentageNodesConsensusState(graph))
@@ -126,19 +126,23 @@ def Step1(graph, node_i, verbose):
 #Step 2 represents the influence of acquaintances on one another, opinions becoming similar as a result of acquaintance.
 def Step2(graph, node_i, verbose):
     
+    previous_opinion = graph.node[node_i]['opinion']
     #Compute neighbours of node_i (can have itself, and many occurence of same neighbour)
     neighbors = list(graph.neighbors(node_i))
+    #filter to remove itself and to keep only the neighbours with different opinion
+    #neighbors = [n for n in graph.neighbors(node_i) if (graph.node[n]['opinion']!=previous_opinion and n!=node_i)]
+    # Apparently it is even worse if we filter ... never converge
     if verbose:
         print('Neighbors of node_i : {0}'.format(neighbors))
         
     #Select random neighbor.
-    node_j = int(np.random.choice(neighbors, 1))
+    if len(neighbors)==0:
+        return graph
+    else:
+        node_j = int(np.random.choice(neighbors, 1))
     if verbose:
         print('Selected node_j : {0}'.format(node_j))
-    
-    #Opinion of node_i
-    if verbose:
-        previous_opinion = graph.node[node_i]['opinion']
+        
     #Change opinion of node_i to the one of node_j
     graph.node[node_i]['opinion'] = graph.node[node_j]['opinion']
     if verbose:

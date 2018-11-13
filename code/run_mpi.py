@@ -21,9 +21,6 @@ def main():
     size = comm.Get_size()  # Stores the number of processes in size.
     rank = comm.Get_rank()  # Stores the rank (pid) of the current process
     
-    n = 3200
-    m = 6400
-    gamma = 10
     n_opinion = int(n/gamma)
     output_path = '/cluster/home/buchsr/output'
     #output_path = '/Users/romainbuchs/Documents/ETHZ/Modelling and Simulating Social Systems/output'
@@ -56,18 +53,16 @@ def main():
         components_num = np.zeros(n)
         components_num[list(comp.keys())] = list(comp.values())
 
-        np.save('{0}/ComponentsSize_phi_{1}_{2}.npy'.format(scratch_path, phi, i), components_num)
-    
-    
+        np.save('{0}/ComponentsSize_{3}_phi_{1}_{2}.npy'.format(scratch_path, phi, i, tag), components_num) 
     
     comm.Barrier()
     if rank==0:
         all_results = []
         for i in range(n_iter):
-            all_results.append(np.load('{0}/ComponentsSize_phi_{1}_{2}.npy'.format(scratch_path, phi, i)))   
+            all_results.append(np.load('{0}/ComponentsSize_{3}_phi_{1}_{2}.npy'.format(scratch_path, phi, i, tag)))   
         all_results = np.array(all_results)
         
-        np.save('{0}/ComponentsSize_phi_{1}.npy'.format(output_path, phi), all_results)
+        np.save('{0}/ComponentsSize_{1}_n{2}_m{3}_gamma{4}_niter{5}_phi_{6}.npy'.format(output_path, tag, n, m, gamma, n_iter, phi), all_results)
 
         try:
             shutil.rmtree(scratch_path)
@@ -78,9 +73,19 @@ def main():
 
 if __name__ == '__main__':
     
-    verbose = False
-    phi = float(sys.argv[1])
-    n_iter = int(sys.argv[2])
+    verbose = True
+    
+    cfgfile = sys.argv[1]
+    
+    with open(cfgfile, 'r') as fp:
+        cfg = yaml.load(fp)
+    
+    n = int(cfg['n'])
+    m = int(cfg['m'])
+    gamma = int(cfg['gamma'])
+    phi = float(cfg['phi'])
+    n_iter = int(cfg['n_iter'])
+    tag = cfg['tag']
     
     main()
 

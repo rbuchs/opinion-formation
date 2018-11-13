@@ -19,8 +19,8 @@ def main():
     m = 6400
     gamma = 10
     n_opinion = int(n/gamma)
-    #output_path = '/cluster/home/buchsr/output'
-    output_path = '/Users/romainbuchs/Documents/ETHZ/Modelling and Simulating Social Systems/output'
+    output_path = '/cluster/home/buchsr/output'
+    #output_path = '/Users/romainbuchs/Documents/ETHZ/Modelling and Simulating Social Systems/output'
     
     print('----------- Graph, n={0}, m={1}, gamma={2} ------------'.format(m,n,gamma))
     print('----------------------- Phi={0} -----------------------'.format(phi))
@@ -31,7 +31,7 @@ def main():
     # Summary
     OpinionGraph.summary(G)
     #iterate
-    n_steps = OpinionAlgorithm.SimulationEndConsensus(G, phi, verbose=False, checkconsensus=1000)
+    n_steps = OpinionAlgorithm.SimulationEndConsensus(G, phi, verbose=True, checkconsensus=1000)
     log(global_t0, 'Consensus found')
     # Summary
     OpinionGraph.summary(G)
@@ -42,7 +42,7 @@ def main():
     components_num = np.zeros(n)
     components_num[list(comp.keys())] = list(comp.values())
     
-    np.save('{0}/componenents_number_phi{1}.npy'.format(output_path, phi), components_num)
+    np.save('{0}/RunSimple_phi{1}.npy'.format(output_path, phi), components_num)
 
 if __name__ == '__main__':
     
