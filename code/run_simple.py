@@ -15,6 +15,7 @@ def log(t0, text):
 def main():
     global_t0 = time.time()
     
+    verbose = False
     n = 3200
     m = 6400
     gamma = 10
@@ -29,14 +30,14 @@ def main():
     G = OpinionGraph.CreateRandom(n, m, n_opinion)
     log(global_t0, 'Random graph created')
     # Summary
-    OpinionGraph.summary(G)
+    G.summary()
     #iterate
-    n_steps = OpinionAlgorithm.SimulationEndConsensus(G, phi, verbose=True, checkconsensus=1000)
+    n_steps = OpinionAlgorithm.SimulationEndConsensus(G, phi, verbose=verbose, checkconsensus=1)
     log(global_t0, 'Consensus found')
     # Summary
-    OpinionGraph.summary(G)
+    G.summary()
     
-    comp = OpinionGraph.CountComponents(G)
+    comp = G.CountComponents()
     comp = dict(comp)
     
     components_num = np.zeros(n)

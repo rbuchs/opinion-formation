@@ -2,13 +2,11 @@ import networkx as nx
 import numpy as np
 import matplotlib.pyplot as plt
 import time
-import OpinionGraph
-from copy import deepcopy
 
 #checkconsensus speeds computation by not checking at everytime if we reached consensus (may end up doing more steps than needed though)
 def SimulationEndConsensus(graph, phi, verbose=False, checkconsensus=1):
     t0 = time.time()  
-    consensus = graph.ConsensusReached() #graph.ConsensusState().all()
+    consensus = graph.ConsensusReached()
     n_step = 0
     s = 0
     
@@ -31,7 +29,7 @@ def SimulationEndConsensus(graph, phi, verbose=False, checkconsensus=1):
             n_step += n_iter_batch
             s = 0
         if (n_step%checkconsensus == 0):
-            consensus = graph.ConsensusReached() #graph.ConsensusState().all()
+            consensus = graph.ConsensusReached()
     n_step += s
     if verbose==True:    
         log(t0, 'Total nuber of steps : {0}'.format(n_step))
@@ -43,7 +41,7 @@ def Simulation(graph, phi, n_step, verbose=False, verboseBeginEnd=False):
     if verbose or verboseBeginEnd:
         layout = nx.spring_layout(graph.internal_graph)
         print('------------- Initial graph ------------')
-        graph.Plot(layout)
+        graph.plot(layout)
         plt.show()
         
     #Compute the picked node and which step (1/2) will be taken at each iteration
@@ -58,10 +56,10 @@ def Simulation(graph, phi, n_step, verbose=False, verboseBeginEnd=False):
     if verboseBeginEnd:
         print('------------- Final graph -------------')
         print('**** Same layout **** ')
-        graph.Plot(layout)
+        graph.plot(layout)
         plt.show()
         print('**** New layout **** ')
-        graph.Plot()
+        graph.plot()
         plt.show()
 
 #Do one step of the model
@@ -87,7 +85,7 @@ def OneIteration(graph, node_i, bool_step, layout=None, verbose=False):
                 print('DOING STEP 2')
             graph.Step2(node_i, verbose=verbose)
     if verbose:
-        graph.Plot(layout)
+        graph.plot(layout)
         plt.show()
     return graph
 

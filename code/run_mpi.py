@@ -40,14 +40,14 @@ def main():
         G = OpinionGraph.CreateRandom(n, m, n_opinion)
         if verbose:
             log(global_t0, 'Random graph created')
-            OpinionGraph.summary(G)
+            G.summary()
         #iterate
         n_steps = OpinionAlgorithm.SimulationEndConsensus(G, phi, verbose=False, checkconsensus=1000)
         if verbose:
             log(global_t0, 'Consensus found')
-            OpinionGraph.summary(G)
+            G.summary()
 
-        comp = OpinionGraph.CountComponents(G)
+        comp = G.CountComponents()
         comp = dict(comp)
 
         components_num = np.zeros(n)
@@ -76,6 +76,7 @@ if __name__ == '__main__':
     verbose = True
     
     cfgfile = sys.argv[1]
+    n_iter = int(sys.argv[2])
     
     with open(cfgfile, 'r') as fp:
         cfg = yaml.load(fp)
@@ -84,7 +85,6 @@ if __name__ == '__main__':
     m = int(cfg['m'])
     gamma = int(cfg['gamma'])
     phi = float(cfg['phi'])
-    n_iter = int(cfg['n_iter'])
     tag = cfg['tag']
     
     main()
