@@ -20,8 +20,8 @@ def main():
     m = 6400
     gamma = 10
     n_opinion = int(n/gamma)
-    output_path = '/cluster/home/buchsr/output'
-    #output_path = '/Users/romainbuchs/Documents/ETHZ/Modelling and Simulating Social Systems/output'
+    #output_path = '/cluster/home/buchsr/output'
+    output_path = '/Users/romainbuchs/Documents/ETHZ/Modelling and Simulating Social Systems/output'
     
     print('----------- Graph, n={0}, m={1}, gamma={2} ------------'.format(m,n,gamma))
     print('----------------------- Phi={0} -----------------------'.format(phi))
