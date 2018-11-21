@@ -22,15 +22,17 @@ def main():
     rank = comm.Get_rank()  # Stores the rank (pid) of the current process
     
     n_opinion = int(n/gamma)
-    output_path = '/cluster/home/buchsr/output'
-    #output_path = '/Users/romainbuchs/Documents/ETHZ/Modelling and Simulating Social Systems/output'
-    scratch_path = '/scratch/buchsr'
+    #output_path = '/cluster/home/buchsr/output'
+    output_path = '/Users/romainbuchs/Documents/ETHZ/Modelling and Simulating Social Systems/output'
+    scratch_path = '/Users/romainbuchs/Documents/ETHZ/Modelling and Simulating Social Systems/scratch'fca
+    #scratch_path = '/scratch/buchsr'
     
     if rank==0:
         print('----------- Graph, n={0}, m={1}, gamma={2} ------------'.format(m,n,gamma))
         print('----------------------- Phi={0} -----------------------'.format(phi))
         print('We will perform {0} iterations'.format(n_iter))
-        os.makedirs(scratch_path)
+        if not os.path.exists(scratch_path):
+            os.makedirs(scratch_path)
     
     iterations = np.arange(n_iter)
     print("Rank {0} assigned {1} iterations".format(rank, len(iterations[rank::size])))
