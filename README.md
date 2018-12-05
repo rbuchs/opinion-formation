@@ -12,21 +12,27 @@ The aim of this project is to reproduce the results of Holme and Newman (2006). 
 # Reproducibility
 
 Dependencies: <br>
-    * `numpy` <br>
-    * `matplotlib` <br>
-    * `networkx` <br>
+  * `numpy` <br>
+  * `matplotlib` <br>
+  * `networkx` <br>
 
 To install any of those packages, run `pip install <package name>`. The two first packages are probably already installed. For more information on the installation of the `networkx` package, see https://networkx.github.io/documentation/stable/install.html.
 
 ## Light test
 
 If you want to reproduce a simpler version of our results and get a sense of how the model works and is implemented, do the following:
-    1. In the terminal, do `git clone https://github.com/rbuchs/opinion-formation.git`
-    2. If you know what a jupyter notebook is and have it installed, go directly to step 3. If you don't: 
-        2.1 Type `jupyter notebook` in the terminal. If it says `jupyter: command not found`, go to step 2.1.1; if some lines containing `The Jupyter Notebook is running at...` appear, go to step 2.1.2
-            2.1.1 To install the jupyter notebook first run `pip install --upgrade pip` to ensure that you have the latest pip and then run `pip install jupyter`. For more information on this installation, see https://jupyter.readthedocs.io/en/latest/install.html.
-            2.1.2 You have jupyter installed and a notebook is now runing. A window of your browser should have opened. If it is not the case, copy the url that poped-up in the terminal and paste it in a browser. Then open the file located at `/other/Tutorial.ipynb`. 
-    3. Open a jupyter notebook and open the file located at `/other/Tutorial.ipynb`.
+
+1. In the terminal, do `git clone https://github.com/rbuchs/opinion-formation.git`
+
+2. If you know what a jupyter notebook is and have it installed, go directly to step 3. If you don't: <br>
+
+  2.1 Type `jupyter notebook` in the terminal. If it says `jupyter: command not found`, go to step 2.1.1; if some lines containing `The Jupyter Notebook is running at...` appear, go to step 2.1.2
+  
+    2.1.1 To install the jupyter notebook first run `pip install --upgrade pip` to ensure that you have the latest pip and then run `pip install jupyter`. For more information on this installation, see https://jupyter.readthedocs.io/en/latest/install.html. <br>
+      
+    2.1.2 You have jupyter installed and a notebook is now runing. A window of your browser should have opened. If it is not the case, copy the url that poped-up in the terminal and paste it in a browser. Then open the file located at `/other/Tutorial.ipynb`. <br>
+    
+   3. Open a jupyter notebook and open the file located at `/other/Tutorial.ipynb`.
 
 ## Full test
 
