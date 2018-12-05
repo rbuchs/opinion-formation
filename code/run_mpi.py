@@ -22,10 +22,10 @@ def main():
     rank = comm.Get_rank()  # Stores the rank (pid) of the current process
     
     n_opinion = int(n/gamma)
-    #output_path = '/cluster/home/buchsr/output'
-    output_path = '/Users/romainbuchs/Documents/ETHZ/Modelling and Simulating Social Systems/output'
-    scratch_path = '/Users/romainbuchs/Documents/ETHZ/Modelling and Simulating Social Systems/scratch'fca
-    #scratch_path = '/scratch/buchsr'
+    #output_path = '/Users/romainbuchs/Documents/ETHZ/Modelling and Simulating Social Systems/output'
+    #scratch_path = '/Users/romainbuchs/Documents/ETHZ/Modelling and Simulating Social Systems/scratch'
+    output_path = '/cluster/home/buchsr/output'
+    scratch_path = '/scratch/buchsr'
     
     if rank==0:
         print('----------- Graph, n={0}, m={1}, gamma={2} ------------'.format(m,n,gamma))
@@ -52,9 +52,8 @@ def main():
         comp = G.CountComponents()
         comp = dict(comp)
 
-        components_num = np.zeros(n)
+        components_num = np.zeros(n+1)
         components_num[list(comp.keys())] = list(comp.values())
-
         np.save('{0}/ComponentsSize_{3}_phi_{1}_{2}.npy'.format(scratch_path, phi, i, tag), components_num) 
     
     comm.Barrier()

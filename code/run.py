@@ -53,9 +53,5 @@ if __name__ == '__main__':
     phi = float(sys.argv[1])
     n_iter = int(sys.argv[2])
     
-    #cfgfile = sys.argv[1]
-    #with open(cfgfile, 'r') as fp:
-    #    cfg = yaml.load(fp)
-    
     main()
 
