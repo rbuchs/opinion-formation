@@ -7,7 +7,7 @@
 
 The aim of this project is to reproduce the results of Holme and Newman (2006). For details on the project, the model used, the implementation and the results, see `/report/report.pdf`
 
-*P. Holme and M. E. J. Newman. Nonequilibrium phase transition in the coevo-lution of networks and opinions. Phys. Rev. E 74, 056108, November 2006*
+*P. Holme and M. E. J. Newman. Nonequilibrium phase transition in the coevolution of networks and opinions. Phys. Rev. E 74, 056108, November 2006*
 
 # Reproducibility
 
