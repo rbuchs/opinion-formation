@@ -5,16 +5,16 @@
 > * Project Title: Opinion formation in networks of acquaintances
 > * Programming language: Python
 
-The aim of this project is to reproduce the results of Holme and Newman (2006). For details on the project, the model used, the implementation and the results, see `/report/report.pdf`
+The aim of this project is to reproduce the results of Holme and Newman (2006). For details on the project, the model used, the implementation and the results, see `/report/report.pdf`.
 
 *P. Holme and M. E. J. Newman. Nonequilibrium phase transition in the coevolution of networks and opinions. Phys. Rev. E 74, 056108, November 2006*
 
 # Reproducibility
 
 Dependencies:
-    - `numpy`
-    - `matplotlib`
-    - `networkx`
+    - `numpy` <br>
+    - `matplotlib` <br>
+    - `networkx` <br>
 
 To install any of those packages, run `pip install <package name>`. The two first packages are probably already installed. For more information on the installation of the `networkx` package, see https://networkx.github.io/documentation/stable/install.html.
 
