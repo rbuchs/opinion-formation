@@ -12,9 +12,9 @@ The aim of this project is to reproduce the results of Holme and Newman (2006). 
 # Reproducibility
 
 Dependencies: <br>
-...* `numpy` <br>
-...* `matplotlib` <br>
-...* `networkx` <br>
+    * `numpy` <br>
+    * `matplotlib` <br>
+    * `networkx` <br>
 
 To install any of those packages, run `pip install <package name>`. The two first packages are probably already installed. For more information on the installation of the `networkx` package, see https://networkx.github.io/documentation/stable/install.html.
 
