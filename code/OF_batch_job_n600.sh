@@ -1,5 +1,5 @@
-#BSUB -J "Opinion-formation-fig3-batch6-[16, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 34, 50]%30"
-#BSUB -oo '/cluster/home/buchsr/output/OpinionFormation_fig3_batch6_%I.log'
+#BSUB -J "Opinion-formation-fig3-batch-n600-[1-101]%30"
+#BSUB -oo '/cluster/home/buchsr/output/OpinionFormation_fig3_batch_n600_%I.log'
 #BSUB -n 20
 #BSUB -W 4:00
 
